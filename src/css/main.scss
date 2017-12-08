@@ -1,0 +1,56 @@
+@import "mq";
+@import "fonts";
+
+// Uncomment for embeds
+//@import "embed";
+
+// Uncomment for full screen (including immersive article main media)
+//@import "fullscreen";
+
+.element-atom,
+.interactive-atom {
+    margin: 0 !important;
+}
+
+.interactive {
+	
+	h1 {
+		@include fs-header(3);
+		margin: 0;
+	}
+
+	h2 {
+		@include fs-headline(3);
+		margin: 0;
+		margin-top: 12px;
+	}
+
+	p, li {
+		@include fs-textSans(3);
+		margin: 0;
+	}
+
+	.event-time {
+		color: #767676;
+
+		&.event-time--Local {
+			display: none;
+		}
+	}
+
+	.medal-event {
+		display: inline-block;
+		border-radius: 12px;
+		height: 12px;
+		width: 12px;
+		vertical-align: -1px;
+
+		&.medal-event--Gold {
+			background-color: #ffbb00;
+		}
+
+		&.medal-event--Bronze {
+			background-color: #7d7569;
+		}
+	}
+}

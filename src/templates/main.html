@@ -1,0 +1,16 @@
+<div class="interactive">
+	{{#countries}}
+		<p>
+			<b>{{olympicCountry.name}}</b>
+			{{medalCount.gold}} - {{medalCount.silver}} - {{medalCount.bronze}} - {{medalCount.total}}
+		</p>
+    {{/countries}}
+
+    <hr/>
+    <h2>All medals</h2>
+    <ul>
+	    {{#medals}}
+	    	<li>{{medalWon}} | {{displayName}} | {{discipline.name}} | {{startDate.0.full}} </li>
+	    {{/medals}}
+	</ul>
+</div>
