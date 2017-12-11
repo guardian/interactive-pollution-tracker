@@ -45,7 +45,7 @@ const generateSitesData = async(sitesList) => {
 
     const summaryDays = generateSummary(siteData);
 
-    fs.writeFileSync("./src/assets/data/pollutionSummariesAllSites.json", JSON.stringify(summaryDays));
+    fs.writeFileSync("./src/assets/data/pollutionSummariesAllSites.json", JSON.stringify(summaryDays.filter(d => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(d.siteMeta["@SiteCode"]) > -1)));
 
     const summaryDaysTotals = summaryDays.map(d => {
         delete d.dailyCounts;
@@ -64,10 +64,10 @@ const generateSummary = (siteData) => {
         const dailyCounts = summary.map((d) => {
             const numAbove200 = d.values.filter(v => Number(v.NO2) > 200).length;
 
-            return {"date" : d.key, "numLimitExceeded": numAbove200};
+            return numAbove200;
         });
 
-        const totalCount = d3.sum(dailyCounts, d => d.numLimitExceeded);
+        const totalCount = d3.sum(dailyCounts, d => d);
 
         return {
             "siteMeta": site.siteMeta,
