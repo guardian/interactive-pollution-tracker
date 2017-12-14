@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# lftpout=$(lftp -e 'mirror -v results ./data/data-real; exit' -u gua_elect,zAgjJrQb ftpout.pa.press.net)
+# echo "$lftpout"
+# lines=$(echo "$lftpout" | wc -l)
+
+# if [ "$lines" -lt "3" ]; then
+# 	echo "nothing changed"
+# fi
+
+# if [ "$lines" -gt "2" ]; then
+# 	echo "files changed"
+# 	cd ./data
+# 	npm run parse
+#     cd ..
+# fi
+
+# if [ "$lines" -gt "2" -o -e ./data/mayor.txt ]; then
+#     echo "deploy"
+
+# 	cd ./interactive
+# 	npm run deploylive
+#     cd ..
+
+#     rm -f ./data/mayor.txt
+# fi
+
+npm run fetch
+npm run deploylive

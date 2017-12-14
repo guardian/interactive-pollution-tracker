@@ -1,0 +1,7 @@
+while true
+do
+    ./run
+    echo "Waiting 30 minutes"
+    sleep 1800
+    echo "Running..."
+done

@@ -261,14 +261,18 @@ gulp.task('deploylive', ['build'], cb => {
         return;
     }
 
-    gulp.src(`${buildDir}/**/*`)
+    gulp.src([`${buildDir}/**/*`, `!${buildDir}/lastUpdated.txt`])
         .pipe(s3Upload('max-age=31536000', s3VersionPath))
         .on('end', () => {
             gulp.src('config.json')
                 .pipe(file('preview', version))
                 .pipe(file('live', version))
                 .pipe(s3Upload('max-age=30', s3Path))
-                .on('end', cb);
+                .on('end', () => {
+                    gulp.src(`${buildDir}/lastUpdated.txt`)
+                    .pipe(s3Upload('max-age=30', s3Path))
+                    .on('end', cb);
+                });
         });
 });
 
