@@ -4,13 +4,38 @@ import rp from 'request-promise'
 import fs from 'fs'
 import * as d3 from "d3"
 
-const loadSiteData = (sitesList) => {
+const loadSiteData = (sitesList, year) => {
     return new Promise((resolve, reject) => {
-        async.mapLimit(sitesList, 10, async.asyncify(async(siteInfo) => {
-            const siteCode = siteInfo["@SiteCode"];
+        const dates = [
+            ["jan", "feb"],
+            ["feb", "mar"],
+            ["mar", "apr"],
+            ["apr", "may"],
+            ["may", "jun"],
+            ["jun", "jul"],
+            ["jul", "sep"],
+            ["sep", "oct"],
+            ["oct", "nov"],
+            ["nov", "dec"]
+        ];
+        // , ["mar", "apr"], ["apr", "may"], ["may", "jun"], ["jul", "sep"], ["sep", "oct"], ["oct", "nov"], ["nov", "dec"]
+
+        var combinations = [];
+
+        dates.forEach(d => {
+            sitesList
+                // .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
+                .forEach(e => {
+                    combinations.push([d, e])
+                });
+        });
+
+        async.mapLimit(combinations, 10, async.retryable(10, async.asyncify(async(siteInfo) => {
+            const siteCode = siteInfo[1]["@SiteCode"];
+            const month = siteInfo[0];
 
             console.log(siteCode + " ...");
-            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20jan%202017/EndDate=01%20feb%202017/Json`, "json": true });
+            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20${month[0]}%20${year}/EndDate=10%20${month[1]}%20${year}/Json`, "json": true });
             console.log(siteCode + " ✓");
 
             // clean the data - abstract into a function
@@ -19,7 +44,7 @@ const loadSiteData = (sitesList) => {
             const key = site.AirQualityData.Columns.Column.find(c => c["@ColumnName"].indexOf("Nitrogen Dioxide") > -1)["@ColumnId"];
 
             return {
-                "siteMeta": siteInfo,
+                "siteMeta": siteInfo[1],
                 "data": site.AirQualityData.RawAQData.Data.map(d => {
                     return {
                         "date": d["@MeasurementDateGMT"],
@@ -28,7 +53,7 @@ const loadSiteData = (sitesList) => {
                 })
             }
 
-        }), (err, results) => {
+        })), (err, results) => {
             if (err) {
                 // need to do something real with errors here, retry?
                 throw err;
@@ -39,20 +64,32 @@ const loadSiteData = (sitesList) => {
 }
 
 const generateSitesData = async(sitesList) => {
-    const siteData = await loadSiteData(sitesList)
+    const years = [2016, 2017];
 
-    fs.writeFileSync("./src/assets/data/pollutionDataAllSites.json", JSON.stringify(siteData));
+    for (let year of years) {
+        const siteData = d3.nest()
+            .key(d => d.siteMeta["@SiteCode"])
+            .entries((await loadSiteData(sitesList, year)))
+            .map(code => {
+                return {
+                    "siteMeta": code.values[0].siteMeta,
+                    "data": _.flatten(code.values.map(d => d.data))
+                }
+            });
 
-    const summaryDays = generateSummary(siteData);
+        fs.writeFileSync("./src/assets/data/pollutionDataAllSites-" + year + ".json", JSON.stringify(siteData));
 
-    fs.writeFileSync("./src/assets/data/pollutionSummariesAllSites.json", JSON.stringify(summaryDays.filter(d => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(d.siteMeta["@SiteCode"]) > -1)));
+        const summaryDays = generateSummary(siteData);
 
-    const summaryDaysTotals = summaryDays.map(d => {
-        delete d.dailyCounts;
-        return d;
-    });
+        fs.writeFileSync("./src/assets/data/pollutionSummariesAllSites-" + year + ".json", JSON.stringify(summaryDays.filter(d => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(d.siteMeta["@SiteCode"]) > -1)));
 
-    fs.writeFileSync("./src/assets/data/pollutionSummaryTotalsAllSites.json", JSON.stringify(summaryDaysTotals));
+        const summaryDaysTotals = summaryDays.map(d => {
+            delete d.dailyCounts;
+            return d;
+        });
+
+        fs.writeFileSync("./src/assets/data/pollutionSummaryTotalsAllSites-" + year + ".json", JSON.stringify(summaryDaysTotals));
+    }
 }
 
 const generateSummary = (siteData) => {
