@@ -16,7 +16,8 @@ const loadSiteData = (sitesList, year) => {
             ["jul", "sep"],
             ["sep", "oct"],
             ["oct", "nov"],
-            ["nov", "dec"]
+            ["nov", "dec"],
+            ["dec", "dec"]
         ];
         // , ["mar", "apr"], ["apr", "may"], ["may", "jun"], ["jul", "sep"], ["sep", "oct"], ["oct", "nov"], ["nov", "dec"]
 
@@ -24,7 +25,7 @@ const loadSiteData = (sitesList, year) => {
 
         dates.forEach(d => {
             sitesList
-                // .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
+                .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
                 .forEach(e => {
                     combinations.push([d, e])
                 });
@@ -34,8 +35,10 @@ const loadSiteData = (sitesList, year) => {
             const siteCode = siteInfo[1]["@SiteCode"];
             const month = siteInfo[0];
 
+            const endDate = (month[0] === month[1]) ? "31" : "01";
+
             console.log(siteCode + " ...");
-            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20${month[0]}%20${year}/EndDate=10%20${month[1]}%20${year}/Json`, "json": true });
+            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20${month[0]}%20${year}/EndDate=${endDate}%20${month[1]}%20${year}/Json`, "json": true });
             console.log(siteCode + " ✓");
 
             // clean the data - abstract into a function
@@ -122,7 +125,7 @@ const generator = async() => {
         })
         .filter(site => site.Species.find(s => s["@SpeciesCode"] === "NO2"))
         .filter(site => site.Species.find(s => s["@SpeciesCode"] === "NO2")["@DateMeasurementFinished"] === "");
-
+        
     generateSitesData(sitesList);
 }
 

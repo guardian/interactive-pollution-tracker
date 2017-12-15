@@ -49,7 +49,9 @@ export async function render() {
         else fs.writeFileSync("./.build/lastUpdated.txt", new Date(), "utf-8");
     });
 
-    return `<div class="map-meta">
+    return `
+    
+    <div class="map-meta">
 	    		<div class="num-exceeded">0</div>
 	    		<div class="buttons">
 	    			<button class="year-button" id="switch-2016">2016</button><button class="year-button active" id="switch-2017">2017 so far</button>
