@@ -25,7 +25,7 @@ const loadSiteData = (sitesList, year) => {
 
         dates.forEach(d => {
             sitesList
-                .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
+                // .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
                 .forEach(e => {
                     combinations.push([d, e])
                 });
