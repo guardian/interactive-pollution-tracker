@@ -85,10 +85,10 @@ Promise.all([
                 .curve(d3.curveStepAfter);
 
             const xAxis = d3.axisBottom(timeScale)
-                .ticks(3);
+                .tickValues([0, 30]);
 
             const yAxis = d3.axisLeft(yScale)
-                .ticks(2);
+                .ticks(0);
 
             svg.append("g").classed("x-axis", true).call(xAxis).style("transform", "translateY(" + height + "px)")
 
@@ -113,9 +113,18 @@ Promise.all([
                 .attr("y2", 0)
                 .classed("target-line", true)
 
+            svg.selectAll(".x-axis .tick text")
+                .text("")
+
+            svg.selectAll(".x-axis .tick:first-of-type text")
+                .text("Jan 1")
+
+            svg.selectAll(".x-axis .tick:last-of-type text")
+                .text("31")
+
             if (i === 0) {
                 svg.append("text")
-                    .text("Annual target")
+                    .text("Annual limit")
                     .attr("x", 0)
                     .attr("y", "-6")
                     .classed("annual-target", true);
@@ -133,6 +142,25 @@ Promise.all([
                     .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
                     .attr("y", "-20")
                     .classed("days-passed", true);
+            } else {
+
+            }
+
+            if (prevYearData.dailyCountsCumulative[prevYearData.dailyCountsCumulative.length - 1] >= 18) {
+                // check this if statement is correct!
+                if (Math.abs(timeScale(site.dailyCountsCumulative.length - 1) - timeScale(prevYearData.dailyCountsCumulative.length - 1)) > 20) {
+                    svg.append("text")
+                        .text(prevYearData.dailyCountsCumulative.length + " days")
+                        .attr("x", timeScale(prevYearData.dailyCountsCumulative.length - 1))
+                        .attr("y", "-6")
+                        .classed("days-passed-prev", true);
+
+                    svg.append("text")
+                        .text("2017")
+                        .attr("x", timeScale(prevYearData.dailyCountsCumulative.length - 1))
+                        .attr("y", "-20")
+                        .classed("days-passed-prev", true);
+                }
             } else {
 
             }
@@ -199,7 +227,7 @@ Promise.all([
         const path = d3.geoPath()
             .projection(projection);
 
-        const circleScale = d3.scaleSqrt().domain([0, 200]).range([(width < 620) ? 2 : 3, width/30]);
+        const circleScale = d3.scaleSqrt().domain([0, 200]).range([(width < 620) ? 2 : 3, width / 30]);
 
         // svg.append("g").selectAll("path")
         //     .data(parks.features)
@@ -278,29 +306,36 @@ Promise.all([
 
         const labels = svg.append("g")
 
-        // circles.each(function(c) {
-        //     if (c.totalCount > 18) {
-        //         const labelProj = projection([c.siteMeta["@Longitude"], c.siteMeta["@Latitude"]]);
+        circles.each(function(c) {
+            if (["LB4", "WA7"].indexOf(c.siteMeta["@SiteCode"]) > -1) {
+                const labelProj = projection([c.siteMeta["@Longitude"], c.siteMeta["@Latitude"]]);
 
-        //         labels.append("text")
-        //             .text(c.siteMeta["@SiteName"].split(" - ")[1])
-        //             .attr("x", labelProj[0])
-        //             .attr("y", labelProj[1])
-        //             .attr("dy", -circleScale(c.totalCount) - 6)
-        //             .style("text-anchor", "middle")
-        //             .classed("text-label-bg", true);
+                const highLow = (c.siteMeta["@SiteCode"] !== "LB4") ? -circleScale(c.totalCount) - 6 : circleScale(c.totalCount) + 15;
 
-        //         labels.append("text")
-        //             .text(c.siteMeta["@SiteName"].split(" - ")[1])
-        //             .attr("x", labelProj[0])
-        //             .attr("y", labelProj[1])
-        //             .attr("dy", -circleScale(c.totalCount) - 6)
-        //             .style("text-anchor", "middle")
-        //             .classed("text-label", true);
-        //     }
-        // });
+                labels.append("text")
+                    .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                    .attr("x", labelProj[0])
+                    .attr("y", labelProj[1])
+                    .attr("dy", highLow)
+                    .style("text-anchor", "middle")
+                    .classed("label-to-grab", true)
+                    .classed("text-label-bg", true);
+
+                labels.append("text")
+                    .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                    .attr("x", labelProj[0])
+                    .attr("y", labelProj[1])
+                    .attr("dy", highLow)
+                    .style("text-anchor", "middle")
+                    .classed("label-to-grab", true)
+                    .classed("text-label", true);
+            }
+        });
 
         d3.select("#switch-2017").on("click", function() {
+            d3.selectAll(".year-button").classed("active", false);
+            d3.select(this).classed("active", true);
+            d3.select(document.body).classed("prev-year", false);
             d3.select(".num-exceeded").html(pollutionSummaries.filter(d => d.totalCount > 18).length)
             circles
                 .data(pollutionSummaries)
@@ -313,10 +348,41 @@ Promise.all([
                 .style("fill-opacity", "0.3")
                 .style("stroke", d => circleColour(d.totalCount))
                 .style("stroke-width", "1px");
+
+            d3.selectAll(".label-to-grab").remove();
+
+            circles.each(function(c) {
+                if (["LB4", "WA7"].indexOf(c.siteMeta["@SiteCode"]) > -1) {
+                    const labelProj = projection([c.siteMeta["@Longitude"], c.siteMeta["@Latitude"]]);
+
+                    const highLow = (c.siteMeta["@SiteCode"] !== "LB4") ? -circleScale(c.totalCount) - 6 : circleScale(c.totalCount) + 15;
+
+                    labels.append("text")
+                        .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                        .attr("x", labelProj[0])
+                        .attr("y", labelProj[1])
+                        .attr("dy", highLow)
+                        .style("text-anchor", "middle")
+                        .classed("label-to-grab", true)
+                        .classed("text-label-bg", true);
+
+                    labels.append("text")
+                        .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                        .attr("x", labelProj[0])
+                        .attr("y", labelProj[1])
+                        .attr("dy", highLow)
+                        .style("text-anchor", "middle")
+                        .classed("label-to-grab", true)
+                        .classed("text-label", true);
+                }
+            });
         });
 
         loadJson(process.env.PATH + "/assets/data/pollutionSummaryTotalsAllSites-2016.json").then((pollutionSummariesOld) => {
             d3.select("#switch-2016").on("click", function() {
+                d3.selectAll(".year-button").classed("active", false);
+                d3.select(this).classed("active", true);
+                d3.select(document.body).classed("prev-year", true);
                 d3.select(".num-exceeded").html(pollutionSummariesOld.filter(d => d.totalCount > 18).length)
 
                 circles
@@ -330,6 +396,34 @@ Promise.all([
                     .style("fill-opacity", "0.3")
                     .style("stroke", d => circleColour(d.totalCount))
                     .style("stroke-width", "1px");
+
+                d3.selectAll(".label-to-grab").remove();
+
+                circles.each(function(c) {
+                    if (["LB4", "WA7"].indexOf(c.siteMeta["@SiteCode"]) > -1) {
+                        const labelProj = projection([c.siteMeta["@Longitude"], c.siteMeta["@Latitude"]]);
+
+                        const highLow = (c.siteMeta["@SiteCode"] !== "LB4") ? -circleScale(c.totalCount) - 6 : circleScale(c.totalCount) + 15;
+
+                        labels.append("text")
+                            .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                            .attr("x", labelProj[0])
+                            .attr("y", labelProj[1])
+                            .attr("dy", highLow)
+                            .style("text-anchor", "middle")
+                            .classed("label-to-grab", true)
+                            .classed("text-label-bg", true);
+
+                        labels.append("text")
+                            .text(c.siteMeta["@SiteName"].split(" - ")[1])
+                            .attr("x", labelProj[0])
+                            .attr("y", labelProj[1])
+                            .attr("dy", highLow)
+                            .style("text-anchor", "middle")
+                            .classed("label-to-grab", true)
+                            .classed("text-label", true);
+                    }
+                });
             });
         });
     });

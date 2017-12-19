@@ -67,8 +67,8 @@
     @include mq(leftCol) {
         width: 860px;
         height: 860px;
-        top: -60px;
-        margin-bottom: -60px;
+        top: -80px;
+        margin-bottom: -80px;
     }
 
     position: relative;
@@ -192,6 +192,12 @@ line.target-line {
     text-anchor: middle;
 }
 
+.days-passed-prev {
+    @include fs-textSans(1);
+    fill: #94b1ca;
+    text-anchor: middle;
+}
+
 .site-name {
     @include fs-header(1);
 }
@@ -249,10 +255,13 @@ line.target-line {
 
 .buttons {
     margin-bottom: 12px;
-    @include mq(400px) {
+    margin-top: 12px;
+
+    @include mq(620px) {
         position: absolute;
-        top: 0;
-        right: 0;
+        margin-top: 0;
+        top: 104px;
+        left: 0;
     }
 }
 
@@ -262,13 +271,22 @@ line.target-line {
     background-color: #f6f6f6;
     border: 0;
     border-radius: 20px;
-    margin-left: 5px;
+    margin-right: 5px;
     @include fs-textSans(3);
     font-weight: bold;
+    outline: 0 !important;
+
+    &:hover {
+        background-color: #eaeaea;
+    }
 
     &.active {
         background-color: #005689;
         color: #fff;
+
+        &:hover {
+            background-color: #00456e;
+        }
     }
 }
 
@@ -283,24 +301,32 @@ line.target-line {
 }
 
 .num-exceeded {
-    @include f-sans;
-    font-weight: 300;
-    font-size: 80px;
-    line-height: 60px;
+    // @include f-sans;
+    // font-weight: 300;
+    // font-size: 80px;
+    // line-height: 60px;
     color: #cc2b12;
-    position: relative;
-    margin-bottom: 12px;
+    // position: relative;
+    // margin-bottom: 12px;
+    @include fs-headline(4);
+    font-weight: 500;
+    margin-top: 12px;
 
     &::after {
-        display: block;
-        position: absolute;
-        content: "locations have already exceeded annual targets";
-        @include fs-textSans(3); // line-height: 18px
-        font-size: 16px;
-        left: 50px;
-        top: 0;
-        max-width: 140px;
+        // display: block;
+        // position: absolute;
+        content: " locations have already exceeded annual targets";
+        // @include fs-textSans(3); // line-height: 18px
+        // font-size: 16px;
+        // left: 50px;
+        // top: 0;
+        // max-width: 140px;
         color: #767676;
+        font-weight: 300;
+
+        .prev-year & {
+            content: " locations exceeded annual targets";
+        }
     }
 } //enhancer
 .content__main-column--interactive>p,

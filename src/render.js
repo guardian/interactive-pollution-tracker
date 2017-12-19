@@ -42,30 +42,30 @@ export async function render() {
 
     // console.log(data[0].data)
     // console.log(path(data[0].data))
-// ${d3n.svgString()}
-    
-    mkdirp('./.build/', function (err) {
+    // ${d3n.svgString()}
+
+    mkdirp('./.build/', function(err) {
         if (err) console.error(err)
         else fs.writeFileSync("./.build/lastUpdated.txt", new Date(), "utf-8");
     });
 
     return `
     
-    <div class="map-meta">
-	    		<div class="num-exceeded">0</div>
-	    		<div class="buttons">
-	    			<button class="year-button" id="switch-2016">2016</button><button class="year-button active" id="switch-2017">2017 so far</button>
-	    		</div>
-	    		<div class="key">
-	    			<div class="key-item key-item--1">Within hourly limits</div>
-	    			<div class="key-item key-item--2">Hourly limit exceeded</div>
-	    			<div class="key-item key-item--3">Annual limit exceeded</div>
+            <div class="map-meta">
+                <div class="key">
+                    <div class="key-item key-item--1">Within hourly limits</div>
+                    <div class="key-item key-item--2">Hourly limit exceeded</div>
+                    <div class="key-item key-item--3">Annual limit exceeded</div>
                     <div class="key-item key-item--text">Circle size is proportional to the number of times the hourly limit has been exceeded</div>
-	    		</div>
-    		</div>
-    		<div class="map-wrapper">
-    			<div class="base-map">
-    				<img src="<%= path %>/assets/baseMap-03.png">
-    			</div>
-    		</div>`;
+                </div>
+                <div class="buttons">
+                    <button class="year-button" id="switch-2016">2016</button><button class="year-button active" id="switch-2017">2017 so far</button>
+                </div>
+                <div class="num-exceeded">0</div>
+            </div>
+            <div class="map-wrapper">
+                <div class="base-map">
+                    <img src="<%= path %>/assets/baseMap-03.png">
+                </div>
+            </div>`;
 }
