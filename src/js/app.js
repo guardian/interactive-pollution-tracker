@@ -1,10 +1,21 @@
-import * as d3 from 'd3'
 import loadJson from "../components/load-json"
 import * as topojson from 'topojson'
 
+import * as d3Array from "d3-array"
+import * as d3Geo from "d3-geo"
+import * as d3Select from "d3-selection"
+import * as d3Scale from "d3-scale"
+import * as d3Shape from "d3-shape"
+import * as d3Transition from "d3-transition"
+import * as d3Axis from "d3-axis"
+
+const d3 = Object.assign({}, d3Array, d3Geo, d3Select, d3Scale, d3Shape, d3Transition, d3Axis);
+
+console.log(d3);
+
 Promise.all([
+        loadJson(process.env.PATH + "/assets/data/pollutionSummariesAllSites-2018.json"),
         loadJson(process.env.PATH + "/assets/data/pollutionSummariesAllSites-2017.json"),
-        loadJson(process.env.PATH + "/assets/data/pollutionSummariesAllSites-2016.json"),
         loadJson("https://interactive.guim.co.uk/docsdata-test/1tEp3Lz1zgr6eiZUixZM_SmmZ_zIWV8MPZVtqwjCQEHw.json")
     ])
     .then((allData) => {
@@ -12,7 +23,7 @@ Promise.all([
         const prevData = allData[1];
         const text = allData[2].sheets.Sheet1;
 
-        const el = d3.select("#interactive-slot-1").append("div").classed(".key-sites", true);
+        const el = d3.select("#interactive-slot-1").append("div").classed("key-sites", true);
         const clientWidth = el.node().clientWidth;
 
         const width = clientWidth < 620 ? clientWidth : 300;
@@ -69,9 +80,9 @@ Promise.all([
                 .html(site.siteMeta["@SiteName"])
                 .classed("line-header", true);
 
-            wrapper.append("div")
-                .html(text.filter(d => d.code === site.siteMeta["@SiteCode"])[0].text)
-                .classed("line-desc", true)
+            // wrapper.append("div")
+            //     .html(text.filter(d => d.code === site.siteMeta["@SiteCode"])[0].text)
+            //     .classed("line-desc", true)
 
             const svg = wrapper
                 .append("svg")
@@ -130,20 +141,8 @@ Promise.all([
                     .classed("annual-target", true);
             }
 
-            if (site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1] >= 18) {
-                svg.append("text")
-                    .text(site.dailyCountsCumulative.length + " days")
-                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
-                    .attr("y", "-6")
-                    .classed("days-passed", true);
-
-                svg.append("text")
-                    .text("2018")
-                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
-                    .attr("y", "-20")
-                    .classed("days-passed", true);
-            } else {
-
+            if (site.dailyCountsCumulative.length === 0) {
+                site.dailyCountsCumulative.push(0)
             }
 
             if (prevYearData.dailyCountsCumulative[prevYearData.dailyCountsCumulative.length - 1] >= 18) {
@@ -190,11 +189,41 @@ Promise.all([
                 .attr("cy", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
                 .attr("r", "3")
                 .style("fill", "#005689");
+
+            if (site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1] >= 18) {
+                svg.append("text")
+                    .text(site.dailyCountsCumulative.length + " days")
+                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                    .attr("y", "-6")
+                    .classed("days-passed", true);
+
+                svg.append("text")
+                    .text("2018")
+                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                    .attr("y", "-20")
+                    .classed("days-passed", true);
+            } else {
+                svg.append("text")
+                    .text("2018")
+                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                    .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
+                    .attr("dy", "-6")
+                    .style("text-anchor", "start")
+                    .classed("days-passed-bg", true);
+
+                svg.append("text")
+                    .text("2018")
+                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                    .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
+                    .attr("dy", "-6")
+                    .style("text-anchor", "start")
+                    .classed("days-passed", true);
+            }
         });
     });
 
 Promise.all([
-        loadJson(process.env.PATH + "/assets/data/pollutionSummaryTotalsAllSites-2017.json")
+        loadJson(process.env.PATH + "/assets/data/pollutionSummaryTotalsAllSites-2018.json")
         // loadJson(process.env.PATH + "/assets/london6.json"),
         // loadJson(process.env.PATH + "/assets/londonRoadsClippedGeo.json"),
         // loadJson(process.env.PATH + "/assets/parksgeojson.geojson"),
@@ -376,9 +405,11 @@ Promise.all([
                         .classed("text-label", true);
                 }
             });
+
+            drawTable(pollutionSummaries);
         });
 
-        loadJson(process.env.PATH + "/assets/data/pollutionSummaryTotalsAllSites-2016.json").then((pollutionSummariesOld) => {
+        loadJson(process.env.PATH + "/assets/data/pollutionSummaryTotalsAllSites-2017.json").then((pollutionSummariesOld) => {
             d3.select("#switch-2016").on("click", function() {
                 d3.selectAll(".year-button").classed("active", false);
                 d3.select(this).classed("active", true);
@@ -424,8 +455,63 @@ Promise.all([
                             .classed("text-label", true);
                     }
                 });
+
+                drawTable(pollutionSummariesOld);
             });
         });
+
+        // map table
+
+        const drawTable = (summaries) => {
+            const tableEl = d3.select(".map-table").html("");
+
+            const top5PollutedSites = summaries.slice().sort((a, b) => b.totalCount - a.totalCount).filter(d => d.totalCount > 0).slice(0, 10);
+
+            if (top5PollutedSites.length > 0) {
+
+                const exceededNotExceeded = [top5PollutedSites.filter(d => d.totalCount > 18), top5PollutedSites.filter(d => d.totalCount <= 18)];
+
+                const headers = tableEl.selectAll("div.grouping")
+                    .data(exceededNotExceeded)
+                    .enter()
+                    .append("div")
+                    .classed("block-wrapper", true)
+
+                headers
+                    .append("h2")
+                    .text((d, i) => (i === 0) ? "Exceeded annual limit" : "Exceeded hourly limits at least once")
+                    .style("display", d => (d.length > 0) ? "inline-block" : "none")
+
+                const topRow = headers.append("div")
+                    .classed("row-wrapper", true)
+                    .style("display", d => (d.length > 0) ? "block" : "none");
+
+                topRow.append("div")
+                    .text((d, i) => "Hourly limit breaches")
+                    .classed("row-count", true)
+
+                topRow.append("div")
+                    .text((d, i) => "Site")
+                    .classed("row-name", true)
+
+                const rows = headers.selectAll("div.foo")
+                    .data(d => d)
+                    .enter()
+                    .append("div")
+                    .classed("row-wrapper", true)
+
+                rows.append("div")
+                    .text(d => d.siteMeta["@SiteName"])
+                    .classed("row-name", true)
+
+                rows.append("div")
+                    .html((d, i) => d.totalCount)
+                    .classed("row-count", true)
+            }
+        }
+
+        drawTable(pollutionSummaries);
+
     });
 
 

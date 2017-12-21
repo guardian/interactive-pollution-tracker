@@ -5,35 +5,35 @@
 //@import "fullscreen";
 @import 'bower_components/guss-typography/_typography.scss';
 
-@mixin f-sans {
-    font-family: 'Guardian Sans Web';
-}
+// @mixin f-sans {
+//     font-family: 'Guardian Sans Web';
+// }
 
-@font-face {
-    font-family: 'Guardian Sans Web';
-    src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands6bol-webfont.woff2') format('woff2'),
-    url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands6bol-webfont.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-}
+// @font-face {
+//     font-family: 'Guardian Sans Web';
+//     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands6bol-webfont.woff2') format('woff2'),
+//     url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands6bol-webfont.woff') format('woff');
+//     font-weight: 700;
+//     font-style: normal;
+// }
 
-@font-face {
-    font-family: 'Guardian Sans Web';
-    src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands3reg-webfont.woff2') format('woff2'),
-    url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands3reg-webfont.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
+// @font-face {
+//     font-family: 'Guardian Sans Web';
+//     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands3reg-webfont.woff2') format('woff2'),
+//     url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands3reg-webfont.woff') format('woff');
+//     font-weight: 400;
+//     font-style: normal;
+// }
 
-@font-face {
-    font-family: 'Guardian Sans Web';
-    src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands1thi-webfont.woff2') format('woff2'),
-    url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands1thi-webfont.woff') format('woff');
-    font-weight: 200;
-    font-style: normal;
-}
+// @font-face {
+//     font-family: 'Guardian Sans Web';
+//     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands1thi-webfont.woff2') format('woff2'),
+//     url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands1thi-webfont.woff') format('woff');
+//     font-weight: 200;
+//     font-style: normal;
+// }
 #interactive-slot-1 {
-    margin-top: 12px;
+    margin-top: 24px;
 }
 
 
@@ -117,6 +117,7 @@
     @include fs-header(1);
     margin: 0;
     padding-bottom: 2px;
+    margin-bottom: 6px;
 }
 
 .line-desc {
@@ -189,6 +190,15 @@ line.target-line {
     @include fs-textSans(1);
     font-weight: bold;
     fill: #005689;
+    text-anchor: middle;
+}
+
+.days-passed-bg {
+    @include fs-textSans(1);
+    font-weight: bold;
+    fill: #fff;
+    stroke: #fff;
+    stroke-width: 3px;
     text-anchor: middle;
 }
 
@@ -300,6 +310,81 @@ line.target-line {
     z-index: 30;
 }
 
+.map-table {
+    @include mq(leftCol) {
+        margin-left: 80px;
+        margin-right: 80px;
+        margin-top: -140px;
+        z-index: 1000;
+        position: relative;
+    }
+    margin-bottom: 24px;
+
+    h2 {
+        @include fs-textSans(3);
+        font-weight: bold;
+        background-color: #ff9b0b;
+        color: #fff;
+        border-radius: 5px;
+        display: inline-block;
+        padding: 2px 5px;
+        margin-bottom: 6px;
+        margin-top: 12px;
+    }
+
+    .row-count {
+        color: #ff9b0b;
+        text-align: right;
+        
+    }
+
+    .row-name {
+        color: #767676;
+    }
+
+    .block-wrapper:first-of-type {
+        h2 {
+            background-color: #cc2b12;
+        }
+
+        .row-count {
+            color: #cc2b12;
+        }
+    }
+}
+
+.row-wrapper {
+    border-bottom: 1px solid #eaeaea;
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    position: relative; 
+    height: 24px;
+    @include fs-textSans(3);
+    // background-color: red;
+
+    .row-name {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .row-count {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-weight: bold;
+    }
+
+    &:first-of-type {
+        color: #767676 !important;
+
+        .row-count {
+            color: #767676 !important;
+        }
+    }
+}
+
 .num-exceeded {
     // @include f-sans;
     // font-weight: 300;
@@ -354,6 +439,11 @@ line.target-line {
     }
 }
 
+.content__main-column--interactive p {
+    z-index: 10;
+    position: relative;
+}
+
 .content__main-column--interactive>h2 {
     font-family: "Guardian Egyptian Web", Georgia;
     font-size: 36px;
@@ -384,12 +474,12 @@ line.target-line {
     }
 }
 
-.content__main-column--interactive>h2+p {
-    font-family: "Guardian Text Sans Web";
-    font-size: 14px;
-    line-height: 18px;
-    color: #767676;
-    // font-weight: bold;
-    margin-top: 2px !important;
-    margin-bottom: 24px;
-}
+// .content__main-column--interactive>h2+p {
+//     font-family: "Guardian Text Sans Web";
+//     font-size: 14px;
+//     line-height: 18px;
+//     color: #767676;
+//     // font-weight: bold;
+//     margin-top: 2px !important;
+//     margin-bottom: 24px;
+// }

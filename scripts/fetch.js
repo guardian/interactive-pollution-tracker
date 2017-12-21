@@ -48,7 +48,7 @@ const loadSiteData = (sitesList, year) => {
 
             return {
                 "siteMeta": siteInfo[1],
-                "data": site.AirQualityData.RawAQData.Data.map(d => {
+                "data": site.AirQualityData.RawAQData.Data.map(d => {  
                     return {
                         "date": d["@MeasurementDateGMT"],
                         "NO2": d["@" + key]
@@ -67,12 +67,14 @@ const loadSiteData = (sitesList, year) => {
 }
 
 const generateSitesData = async(sitesList) => {
-    const years = [2016, 2017];
+    const years = [2017, 2018];
 
     for (let year of years) {
+        const input = (await loadSiteData(sitesList, year));
+
         const siteData = d3.nest()
             .key(d => d.siteMeta["@SiteCode"])
-            .entries((await loadSiteData(sitesList, year)))
+            .entries(input)
             .map(code => {
                 return {
                     "siteMeta": code.values[0].siteMeta,
@@ -101,7 +103,9 @@ const generateSummary = (siteData) => {
             .key(d => d.date.split(" ")[0])
             .entries(site.data)
 
-        const dailyCounts = summary.map((d) => {
+        const dailyCounts = summary.filter(d => {
+            return d.values.filter(f => f.NO2 !== "").length > 0
+        }).map((d) => {
             const numAbove200 = d.values.filter(v => Number(v.NO2) > 200).length;
 
             return numAbove200;
