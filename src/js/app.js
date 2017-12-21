@@ -203,21 +203,23 @@ Promise.all([
                     .attr("y", "-20")
                     .classed("days-passed", true);
             } else {
-                svg.append("text")
-                    .text("2018")
-                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
-                    .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
-                    .attr("dy", "-6")
-                    .style("text-anchor", "start")
-                    .classed("days-passed-bg", true);
+                if(i === 0) {
+                    svg.append("text")
+                        .text("2018")
+                        .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                        .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
+                        .attr("dy", "-6")
+                        .style("text-anchor", "start")
+                        .classed("days-passed-bg", true);
 
-                svg.append("text")
-                    .text("2018")
-                    .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
-                    .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
-                    .attr("dy", "-6")
-                    .style("text-anchor", "start")
-                    .classed("days-passed", true);
+                    svg.append("text")
+                        .text("2018")
+                        .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
+                        .attr("y", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
+                        .attr("dy", "-6")
+                        .style("text-anchor", "start")
+                        .classed("days-passed", true);
+                }
             }
         });
     });
