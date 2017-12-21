@@ -467,7 +467,7 @@ Promise.all([
         const drawTable = (summaries) => {
             const tableEl = d3.select(".map-table").html("");
 
-            const top5PollutedSites = summaries.slice().sort((a, b) => b.totalCount - a.totalCount).filter(d => d.totalCount > 0).slice(0, 10);
+            const top5PollutedSites = summaries.slice().sort((a, b) => b.totalCount - a.totalCount).filter(d => d.totalCount > 0);
 
             if (top5PollutedSites.length > 0) {
 
