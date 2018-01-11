@@ -135,7 +135,7 @@ Promise.all([
 
             if (i === 0) {
                 svg.append("text")
-                    .text("Annual limit")
+                    .text("Annual limit, 18 times")
                     .attr("x", 0)
                     .attr("y", "-6")
                     .classed("annual-target", true);
