@@ -4,11 +4,9 @@
 // Uncomment for full screen (including immersive article main media)
 //@import "fullscreen";
 @import 'bower_components/guss-typography/_typography.scss';
-
 // @mixin f-sans {
 //     font-family: 'Guardian Sans Web';
 // }
-
 // @font-face {
 //     font-family: 'Guardian Sans Web';
 //     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands6bol-webfont.woff2') format('woff2'),
@@ -16,7 +14,6 @@
 //     font-weight: 700;
 //     font-style: normal;
 // }
-
 // @font-face {
 //     font-family: 'Guardian Sans Web';
 //     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands3reg-webfont.woff2') format('woff2'),
@@ -24,7 +21,6 @@
 //     font-weight: 400;
 //     font-style: normal;
 // }
-
 // @font-face {
 //     font-family: 'Guardian Sans Web';
 //     src: url('https://interactive.guim.co.uk/fonts/displaysans/fonts/gdnsands1thi-webfont.woff2') format('woff2'),
@@ -35,8 +31,6 @@
 #interactive-slot-1 {
     margin-top: 24px;
 }
-
-
 
 .element-atom,
 .interactive-atom {
@@ -56,27 +50,21 @@
 .map-wrapper {
     width: 100%;
     height: 100%;
-
-
     @include mq(tablet) {
         height: 620px;
         width: 620px;
         top: -30px;
     }
-
     @include mq(leftCol) {
         width: 860px;
         height: 860px;
         top: -80px;
         margin-bottom: -80px;
     }
-
     position: relative;
-
     svg {
         position: absolute;
         top: 0;
-
         circle {
             fill-opacity: 0.01 !important;
             stroke-width: 1.2px !important;
@@ -90,9 +78,7 @@
     pointer-events: none;
     box-sizing: border-box; // padding: 6px 5px;
     @include fs-textSans(3);
-
     transition: opacity 0.15s ease-in-out;
-
     h4 {
         margin: 0;
         font-weight: 900;
@@ -102,7 +88,6 @@
         padding: 1px 5px;
         @include fs-header(1);
     }
-
     p {
         margin: 0;
         background-color: #fff;
@@ -115,6 +100,7 @@
 
 .line-header {
     @include fs-header(1);
+    font-size: 15px;
     margin: 0;
     padding-bottom: 2px;
     margin-bottom: 6px;
@@ -156,7 +142,6 @@
     }
     vertical-align: top;
     margin-bottom: 36px;
-
     &:nth-child(2n+1) {
         margin-right: 20px;
     }
@@ -168,7 +153,6 @@
     line {
         stroke: #767676 !important;
     }
-
     text {
         stroke: none !important;
         @include fs-textSans(1);
@@ -189,7 +173,7 @@ line.target-line {
 .days-passed {
     @include fs-textSans(1);
     font-weight: bold;
-    fill: #005689;
+    fill: #ff1921;
     text-anchor: middle;
 }
 
@@ -204,7 +188,7 @@ line.target-line {
 
 .days-passed-prev {
     @include fs-textSans(1);
-    fill: #94b1ca;
+    fill: #929297;
     text-anchor: middle;
 }
 
@@ -219,7 +203,6 @@ line.target-line {
         margin-right: 20px;
         color: #767676;
         @include fs-textSans(3);
-
         &::before {
             content: '';
             display: inline-block;
@@ -232,31 +215,26 @@ line.target-line {
             transform: translateY(1px);
         }
     }
-
     .key-item--1 {
         &::before {
             border-color: rgb(189, 189, 189);
         }
     }
-
     .key-item--2 {
         &::before {
             border-color: rgb(255, 155, 11);
         }
     }
-
     .key-item--3 {
         &::before {
             border-color: rgb(204, 43, 18);
         }
     }
-
     .key-item--text {
         display: block; // margin-top:/
         @include mq($until: mobileLandscape) {
             margin-top: 4px;
         }
-
         &::before {
             display: none;
         }
@@ -266,7 +244,6 @@ line.target-line {
 .buttons {
     margin-bottom: 12px;
     margin-top: 12px;
-
     @include mq(620px) {
         position: absolute;
         margin-top: 0;
@@ -285,17 +262,14 @@ line.target-line {
     @include fs-textSans(3);
     font-weight: bold;
     outline: 0 !important;
-
     &:hover {
         background-color: #eaeaea;
     }
-
     &.active {
-        background-color: #005689;
+        background-color: #ff1921;
         color: #fff;
-
         &:hover {
-            background-color: #00456e;
+            background-color: #cc0a11;
         }
     }
 }
@@ -319,11 +293,10 @@ line.target-line {
         position: relative;
     }
     margin-bottom: 24px;
-
     h2 {
         @include fs-textSans(3);
         font-weight: bold;
-        background-color: #ff9b0b;
+        background-color: #f5be2c;
         color: #fff;
         border-radius: 5px;
         display: inline-block;
@@ -331,24 +304,19 @@ line.target-line {
         margin-bottom: 6px;
         margin-top: 12px;
     }
-
     .row-count {
-        color: #ff9b0b;
+        color: #f5be2c;
         text-align: right;
-        
     }
-
     .row-name {
         color: #767676;
     }
-
     .block-wrapper:first-of-type {
         h2 {
-            background-color: #cc2b12;
+            background-color: #ff1921;
         }
-
         .row-count {
-            color: #cc2b12;
+            color: #ff1921;
         }
     }
 }
@@ -357,28 +325,23 @@ line.target-line {
     border-bottom: 1px solid #eaeaea;
     margin-top: 6px;
     margin-bottom: 6px;
-
-    position: relative; 
+    position: relative;
     height: 24px;
     @include fs-textSans(3);
     // background-color: red;
-
     .row-name {
         position: absolute;
         left: 0;
         top: 0;
     }
-
     .row-count {
         position: absolute;
         right: 0;
         top: 0;
         font-weight: bold;
     }
-
     &:first-of-type {
         color: #767676 !important;
-
         .row-count {
             color: #767676 !important;
         }
@@ -390,13 +353,12 @@ line.target-line {
     // font-weight: 300;
     // font-size: 80px;
     // line-height: 60px;
-    color: #cc2b12;
+    color: #ff1921;
     // position: relative;
     // margin-bottom: 12px;
     @include fs-headline(4);
     font-weight: 500;
     margin-top: 12px;
-
     &::after {
         // display: block;
         // position: absolute;
@@ -408,7 +370,6 @@ line.target-line {
         // max-width: 140px;
         color: #767676;
         font-weight: 300;
-
         .prev-year & {
             content: " locations exceeded annual targets";
         }
@@ -482,4 +443,4 @@ line.target-line {
 //     // font-weight: bold;
 //     margin-top: 2px !important;
 //     margin-bottom: 24px;
-// }
+// }days-

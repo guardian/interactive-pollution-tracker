@@ -167,7 +167,7 @@ Promise.all([
             svg.append("path")
                 .datum(prevYearData.dailyCountsCumulative)
                 .attr("fill", "none")
-                .attr("stroke", "#c5d4ea")
+                .attr("stroke", "#929297")
                 .attr("stroke-width", 1.5)
                 .attr("d", line);
 
@@ -175,12 +175,12 @@ Promise.all([
                 .attr("cx", timeScale(prevYearData.dailyCountsCumulative.length - 1))
                 .attr("cy", yScale(prevYearData.dailyCountsCumulative[prevYearData.dailyCountsCumulative.length - 1]))
                 .attr("r", "3")
-                .style("fill", "#c5d4ea");
+                .style("fill", "#929297");
 
             svg.append("path")
                 .datum(site.dailyCountsCumulative)
                 .attr("fill", "none")
-                .attr("stroke", "#005689")
+                .attr("stroke", "#ff1921")
                 .attr("stroke-width", 1.5)
                 .attr("d", line);
 
@@ -188,7 +188,7 @@ Promise.all([
                 .attr("cx", timeScale(site.dailyCountsCumulative.length - 1))
                 .attr("cy", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
                 .attr("r", "3")
-                .style("fill", "#005689");
+                .style("fill", "#ff1921");
 
             if (site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1] >= 18) {
                 svg.append("text")
@@ -203,7 +203,7 @@ Promise.all([
                     .attr("y", "-20")
                     .classed("days-passed", true);
             } else {
-                if(i === 0) {
+                if (i === 0) {
                     svg.append("text")
                         .text("2018")
                         .attr("x", timeScale(site.dailyCountsCumulative.length - 1))
@@ -519,9 +519,9 @@ Promise.all([
 
 function circleColour(val) {
     if (val > 18) {
-        return "#cc2b12"
+        return "#ff1921"
     } else if (val > 0) {
-        return "#ff9b0b"
+        return "#f5be2c"
     } else {
         return "#bdbdbd"
     }
