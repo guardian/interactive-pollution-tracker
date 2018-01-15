@@ -406,10 +406,7 @@ line.target-line {
 }
 
 .content__main-column--interactive>h2 {
-    font-family: "Guardian Egyptian Web", Georgia;
-    font-size: 36px;
-    line-height: 42px;
-    font-weight: 200;
+    @include fs-header(4);
     color: #333;
     margin-top: 36px;
     margin-bottom: 6px;
