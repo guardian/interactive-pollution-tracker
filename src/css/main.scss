@@ -173,7 +173,7 @@ line.target-line {
 .days-passed {
     @include fs-textSans(1);
     font-weight: bold;
-    fill: #ff1921;
+    fill: #e00000;
     text-anchor: middle;
 }
 
@@ -266,7 +266,7 @@ line.target-line {
         background-color: #eaeaea;
     }
     &.active {
-        background-color: #ff1921;
+        background-color: #e00000;
         color: #fff;
         &:hover {
             background-color: #cc0a11;
@@ -313,10 +313,10 @@ line.target-line {
     }
     .block-wrapper:first-of-type {
         h2 {
-            background-color: #ff1921;
+            background-color: #e00000;
         }
         .row-count {
-            color: #ff1921;
+            color: #e00000;
         }
     }
 }
@@ -353,7 +353,7 @@ line.target-line {
     // font-weight: 300;
     // font-size: 80px;
     // line-height: 60px;
-    color: #ff1921;
+    color: #e00000;
     // position: relative;
     // margin-bottom: 12px;
     @include fs-headline(4);

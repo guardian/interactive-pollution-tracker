@@ -180,7 +180,7 @@ Promise.all([
             svg.append("path")
                 .datum(site.dailyCountsCumulative)
                 .attr("fill", "none")
-                .attr("stroke", "#ff1921")
+                .attr("stroke", "#e00000")
                 .attr("stroke-width", 1.5)
                 .attr("d", line);
 
@@ -188,7 +188,7 @@ Promise.all([
                 .attr("cx", timeScale(site.dailyCountsCumulative.length - 1))
                 .attr("cy", yScale(site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1]))
                 .attr("r", "3")
-                .style("fill", "#ff1921");
+                .style("fill", "#e00000");
 
             if (site.dailyCountsCumulative[site.dailyCountsCumulative.length - 1] >= 18) {
                 svg.append("text")
@@ -519,7 +519,7 @@ Promise.all([
 
 function circleColour(val) {
     if (val > 18) {
-        return "#ff1921"
+        return "#e00000"
     } else if (val > 0) {
         return "#f5be2c"
     } else {
