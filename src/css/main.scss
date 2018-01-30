@@ -32,6 +32,10 @@
     margin-top: 24px;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 .element-atom,
 .interactive-atom {
     margin: 0 !important;
@@ -373,8 +377,19 @@ line.target-line {
         .prev-year & {
             content: " locations exceeded annual targets";
         }
+
     }
-} //enhancer
+} 
+
+.just-one {
+    &::after {
+        // display: block;
+        // position: absolute;
+        content: " location has already exceeded annual targets";
+    }
+}
+
+//enhancer
 .content__main-column--interactive>p,
 .content__main-column--interactive>h2,
 .content__main-column--interactive .element-interactive,

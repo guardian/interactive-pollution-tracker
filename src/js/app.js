@@ -296,7 +296,11 @@ Promise.all([
         //     .style("stroke", "#eaeaea")
         //     .style("stroke-width", "0.5px");
 
-        d3.select(".num-exceeded").html(pollutionSummaries.filter(d => d.totalCount > 18).length)
+        d3.select(".num-exceeded").html(pollutionSummaries.filter(d => d.totalCount > 18).length);
+
+        if(pollutionSummaries.filter(d => d.totalCount > 18).length === 1) {
+            d3.select(".num-exceeded").classed("just-one", true);
+        }
 
         const hoverBox = d3.select(".map-wrapper")
             .append("div")
