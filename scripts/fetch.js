@@ -8,27 +8,32 @@ const loadSiteData = (sitesList, year) => {
     return new Promise((resolve, reject) => {
         const dates = [
             ["jan", "feb"],
-            ["feb", "mar"],
-            ["mar", "apr"],
-            ["apr", "may"],
-            ["may", "jun"],
-            ["jun", "jul"],
-            ["jul", "sep"],
-            ["sep", "oct"],
-            ["oct", "nov"],
-            ["nov", "dec"],
-            ["dec", "dec"]
+            ["feb", "mar"]
         ];
+
+        // const dates = [
+        //     ["jan", "feb"],
+        //     ["feb", "mar"],
+        //     ["mar", "apr"],
+        //     ["apr", "may"],
+        //     ["may", "jun"],
+        //     ["jun", "jul"],
+        //     ["jul", "sep"],
+        //     ["sep", "oct"],
+        //     ["oct", "nov"],
+        //     ["nov", "dec"],
+        //     ["dec", "dec"]
+        // ];
         // , ["mar", "apr"], ["apr", "may"], ["may", "jun"], ["jul", "sep"], ["sep", "oct"], ["oct", "nov"], ["nov", "dec"]
 
         var combinations = [];
 
         dates.forEach(d => {
             sitesList
-                // .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
+            // .filter(a => ["LB4", "NB1", "CT6", "WM6", "WA7", "WA8"].indexOf(a["@SiteCode"]) > -1)
                 .forEach(e => {
-                    combinations.push([d, e])
-                });
+                combinations.push([d, e])
+            });
         });
 
         async.mapLimit(combinations, 10, async.retryable(10, async.asyncify(async(siteInfo) => {
@@ -37,9 +42,9 @@ const loadSiteData = (sitesList, year) => {
 
             const endDate = (month[0] === month[1]) ? "31" : "01";
 
-            console.log(siteCode + " ...");
+            console.log(siteCode + "/" + month[0] + "/" + year + " ...");
             const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20${month[0]}%20${year}/EndDate=${endDate}%20${month[1]}%20${year}/Json`, "json": true });
-            console.log(siteCode + " ✓");
+            // console.log(siteCode + " ✓");
 
             // clean the data - abstract into a function
             site.AirQualityData.Columns.Column = (Array.isArray(site.AirQualityData.Columns.Column)) ? site.AirQualityData.Columns.Column : [site.AirQualityData.Columns.Column];
@@ -48,7 +53,7 @@ const loadSiteData = (sitesList, year) => {
 
             return {
                 "siteMeta": siteInfo[1],
-                "data": site.AirQualityData.RawAQData.Data.map(d => {  
+                "data": site.AirQualityData.RawAQData.Data.map(d => {
                     return {
                         "date": d["@MeasurementDateGMT"],
                         "NO2": d["@" + key]
@@ -67,7 +72,7 @@ const loadSiteData = (sitesList, year) => {
 }
 
 const generateSitesData = async(sitesList) => {
-    const years = [2017, 2018];
+    const years = [2018];
 
     for (let year of years) {
         const input = (await loadSiteData(sitesList, year));
@@ -129,7 +134,7 @@ const generator = async() => {
         })
         .filter(site => site.Species.find(s => s["@SpeciesCode"] === "NO2"))
         .filter(site => site.Species.find(s => s["@SpeciesCode"] === "NO2")["@DateMeasurementFinished"] === "");
-        
+
     generateSitesData(sitesList);
 }
 
