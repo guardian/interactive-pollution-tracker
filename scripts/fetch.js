@@ -87,7 +87,7 @@ const generateSitesData = async(sitesList) => {
                 }
             });
 
-        fs.writeFileSync("./src/assets/data/pollutionDataAllSites-" + year + ".json", JSON.stringify(siteData));
+        // fs.writeFileSync("./src/assets/data/pollutionDataAllSites-" + year + ".json", JSON.stringify(siteData));
 
         const summaryDays = generateSummary(siteData);
 
