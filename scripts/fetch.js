@@ -7,8 +7,11 @@ import * as d3 from "d3"
 const loadSiteData = (sitesList, year) => {
     return new Promise((resolve, reject) => {
         const dates = [
-            ["jan", "feb"],
-            ["feb", "mar"]
+            [{"month": "jan", "day": "01"}, {"month": "jan", "day": "31"}],
+            [{"month": "feb", "day": "01"}, {"month": "feb", "day": "28"}],
+            [{"month": "mar", "day": "01"}, {"month": "mar", "day": "31"}],
+            [{"month": "apr", "day": "01"}, {"month": "apr", "day": "30"}],
+            [{"month": "may", "day": "01"}, {"month": "may", "day": "31"}]
         ];
 
         // const dates = [
@@ -36,15 +39,15 @@ const loadSiteData = (sitesList, year) => {
             });
         });
 
-        async.mapLimit(combinations, 10, async.retryable(10, async.asyncify(async(siteInfo) => {
+        async.mapLimit(combinations, 10, async.retryable(5, async.asyncify(async(siteInfo) => {
             const siteCode = siteInfo[1]["@SiteCode"];
             const month = siteInfo[0];
 
-            const endDate = (month[0] === month[1]) ? "31" : "01";
+            // console.log(siteInfo)
 
             console.log(siteCode + "/" + month[0] + "/" + year + " ...");
-            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=01%20${month[0]}%20${year}/EndDate=${endDate}%20${month[1]}%20${year}/Json`, "json": true });
-            // console.log(siteCode + " ✓");
+            const site = await rp({ "uri": `http://api.erg.kcl.ac.uk/AirQuality/Data/Wide/Site/SiteCode=${siteCode}/StartDate=${month[0].day}%20${month[0].month}%20${year}/EndDate=${month[1].day}%20${month[1].month}%20${year}/Json`, "json": true });
+            console.log(siteCode + " ✓");
 
             // clean the data - abstract into a function
             site.AirQualityData.Columns.Column = (Array.isArray(site.AirQualityData.Columns.Column)) ? site.AirQualityData.Columns.Column : [site.AirQualityData.Columns.Column];
