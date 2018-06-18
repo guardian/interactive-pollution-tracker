@@ -12,7 +12,8 @@ const loadSiteData = (sitesList, year) => {
             [{ "month": "mar", "day": "01" }, { "month": "mar", "day": "31" }],
             [{ "month": "apr", "day": "01" }, { "month": "apr", "day": "30" }],
             [{ "month": "may", "day": "01" }, { "month": "may", "day": "31" }],
-            [{ "month": "june", "day": "01" }, { "month": "june", "day": "30" }]
+            [{ "month": "june", "day": "01" }, { "month": "june", "day": "30" }],
+            [{ "month": "july", "day": "01" }, { "month": "july", "day": "31" }]
         ];
 
         // const dates = [
